@@ -20,6 +20,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -101,7 +102,7 @@ public class DataxJsonHelper implements DataxJsonInterface {
         this.hbaseReaderDto = dataxJsonDto.getHbaseReader();
         // reader 插件
         String datasource = readerDatasource.getDatasource();
-
+        Collections.sort(readerColumns);
         this.readerColumns = convertKeywordsColumns(datasource, this.readerColumns);
         if (MYSQL.equals(datasource)) {
             readerPlugin = new MysqlReader();
@@ -143,6 +144,7 @@ public class DataxJsonHelper implements DataxJsonInterface {
         this.mongoDBWriterDto = dataxJsonDto.getMongoDBWriter();
         // writer
         String datasource = readerDatasource.getDatasource();
+        Collections.sort(writerColumns);
         this.writerColumns = convertKeywordsColumns(datasource, this.writerColumns);
         if (MYSQL.equals(datasource)) {
             writerPlugin = new MysqlWriter();
@@ -226,7 +228,8 @@ public class DataxJsonHelper implements DataxJsonInterface {
         Map<String, Object> res = Maps.newLinkedHashMap();
         Map<String, Object> speedMap = Maps.newLinkedHashMap();
         Map<String, Object> errorLimitMap = Maps.newLinkedHashMap();
-        speedMap.putAll(ImmutableMap.of("channel", 3, "byte", 1048576));
+//        speedMap.putAll(ImmutableMap.of("channel", 3, "byte", 1048576));
+        speedMap.putAll(ImmutableMap.of("channel", 3));
         errorLimitMap.putAll(ImmutableMap.of("record", 0, "percentage", 0.02));
         res.put("speed", speedMap);
         res.put("errorLimit", errorLimitMap);
