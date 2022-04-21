@@ -1,0 +1,35 @@
+FROM openjdk:8
+
+ENV LANG C.UTF-8 \
+    TIME_ZONE=Asia/Shanghai \
+     DATAX_NAME datax-web-admin
+
+ADD  target/datax-admin-2.1.2.jar  /opt/${DATAX_NAME}/
+
+
+
+ARG DATA_PATH=/opt/${DATAX_NAME}/data
+ARG SERVER_PORT=9527
+ARG DB_USERNAME=root
+ARG DB_PASSWORD=root
+ARG DB_HOST=127.0.0.1
+ARG DB_PORT=3306
+ARG DB_DATABASE=datax-web
+#先阶段只支持qq邮箱
+ARG MAIL_USERNAME=username
+ARG MAIL_PASSWORD=password
+ENV SERVER_PORT=${SERVER_PORT} \
+    DB_USERNAME=${DB_USERNAME} \
+    DB_PASSWORD=${DB_PASSWORD} \
+    DB_HOST=${DB_HOST} \
+    DB_PORT=${DB_PORT} \
+    DB_DATABASE=${DB_DATABASE} \
+    MAIL_USERNAME=${MAIL_USERNAME} \
+    MAIL_PASSWORD=${MAIL_PASSWORD} \
+    DATA_PATH=${DATA_PATH}:. \
+    CLASSPATH=/opt/${DATAX_NAME}/lib/*:/opt/${DATAX_NAME}/conf:.
+
+EXPOSE ${SERVER_PORT}
+WORKDIR /opt/${DATAX_NAME}
+
+ENTRYPOINT ["sh", "-c", "java ${JAVA_OPTS} -jar /opt/${DATAX_NAME}/datax-admin-2.1.2.jar"]
